@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { getProductsFromQuery } from '../services/api';
+import { getCategories, getProductsFromQuery } from '../services/api';
 import ProductCard from './ProductCard';
 
 class Home extends React.Component {
@@ -9,10 +10,22 @@ class Home extends React.Component {
     this.state = {
       query: '',
       products: [],
+      categorias: [],
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleCategories();
+  }
+
+  handleCategories = async () => {
+    const arrayCategorias = await getCategories();
+    this.setState({
+      categorias: arrayCategorias,
+    });
   }
 
   handleInputChange({ target: { value } }) {
@@ -26,9 +39,23 @@ class Home extends React.Component {
   }
 
   render() {
-    const { query, products } = this.state;
+    const { query, products, categorias } = this.state;
     return (
-      <div>
+      <div className="home">
+        <div className="categorias">
+          { categorias.map((categoria) => {
+            const { name, id } = categoria;
+            return (
+              <button
+                key={ id }
+                data-testid="category"
+                type="button"
+              >
+                { name }
+              </button>
+            );
+          }) }
+        </div>
         <section className="section__search">
           <input
             placeholder="Pesquisa"
@@ -40,6 +67,7 @@ class Home extends React.Component {
           <button type="button" data-testid="query-button" onClick={ this.handleSearch }>
             Pesquisar
           </button>
+          <Link data-testid="shopping-cart-button" to="/shoppingcart">carrinho</Link>
         </section>
         <section className="section__products">
           <p data-testid="home-initial-message">
