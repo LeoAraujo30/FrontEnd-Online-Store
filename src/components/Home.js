@@ -16,10 +16,9 @@ class Home extends React.Component {
 
   handleCategories = async () => {
     const arrayCategorias = await getCategories();
-    await this.setState({
+    this.setState({
       categorias: arrayCategorias,
     });
-    console.log(this.state);
   }
 
   render() {
