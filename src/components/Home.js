@@ -1,9 +1,45 @@
 import React from 'react';
+import { getCategories } from '../services/api';
 
 class Home extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      categorias: [],
+    };
+  }
+
+  componentDidMount() {
+    this.handleCategories();
+  }
+
+  handleCategories = async () => {
+    const arrayCategorias = await getCategories();
+    await this.setState({
+      categorias: arrayCategorias,
+    });
+    console.log(this.state);
+  }
+
   render() {
+    const { categorias } = this.state;
     return (
-      <div>
+      <div className="home">
+        <div className="categorias">
+          { categorias.map((categoria) => {
+            const { name, id } = categoria;
+            return (
+              <button
+                key={ id }
+                data-testid="category"
+                type="button"
+              >
+                { name }
+              </button>
+            );
+          }) }
+        </div>
         <p
           data-testid="home-initial-message"
         >
