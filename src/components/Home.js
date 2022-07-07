@@ -1,14 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories } from '../services/api';
+
+import { getCategories, getProductsFromQuery } from '../services/api';
+import ProductCard from './ProductCard';
 
 class Home extends React.Component {
   constructor() {
     super();
-
     this.state = {
+      query: '',
+      products: [],
       categorias: [],
     };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   componentDidMount() {
@@ -22,8 +28,18 @@ class Home extends React.Component {
     });
   }
 
+  handleInputChange({ target: { value } }) {
+    this.setState({ query: value });
+  }
+
+  async handleSearch() {
+    const { query } = this.state;
+    const products = await getProductsFromQuery(query);
+    this.setState({ products });
+  }
+
   render() {
-    const { categorias } = this.state;
+    const { query, products, categorias } = this.state;
     return (
       <div className="home">
         <div className="categorias">
@@ -40,12 +56,28 @@ class Home extends React.Component {
             );
           }) }
         </div>
-        <p
-          data-testid="home-initial-message"
-        >
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </p>
-        <Link data-testid="shopping-cart-button" to="/shoppingcart">carrinho</Link>
+        <section className="section__search">
+          <input
+            placeholder="Pesquisa"
+            type="text"
+            data-testid="query-input"
+            onChange={ this.handleInputChange }
+            value={ query }
+          />
+          <button type="button" data-testid="query-button" onClick={ this.handleSearch }>
+            Pesquisar
+          </button>
+          <Link data-testid="shopping-cart-button" to="/shoppingcart">carrinho</Link>
+        </section>
+        <section className="section__products">
+          <p data-testid="home-initial-message">
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </p>
+          {(products && query) ? (
+            products.map((product) => (
+              <ProductCard key={ product.id } product={ product } />))
+          ) : <p>Nenhum produto foi encontrado</p>}
+        </section>
       </div>
     );
   }
