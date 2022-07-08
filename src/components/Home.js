@@ -75,7 +75,7 @@ class Home extends React.Component {
           </p>
           {(products && query) ? (
             products.map((product) => (
-              <ProductCard key={ product.id } product={ product } />))
+              <ProductCard key={ product.id } product={ product } inHome />))
           ) : <p>Nenhum produto foi encontrado</p>}
         </section>
       </div>
