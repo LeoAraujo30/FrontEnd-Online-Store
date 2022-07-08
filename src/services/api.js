@@ -27,3 +27,10 @@ export async function getProductsFromCategoty(categoryId) {
   const products = await response.json();
   return products.results;
 }
+
+export async function getProductInfo(id) {
+  const endPoint = `${baseUrl}/items/${id}`;
+  const response = await fetch(endPoint);
+  const product = await response.json();
+  return product;
+}

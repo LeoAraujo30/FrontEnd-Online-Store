@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import {
   getCategories,
   getProductsFromQuery,
-  getProductsFromCategoty } from '../services/api';
+  getProductsFromCategoty,
+} from '../services/api';
 import ProductCard from './ProductCard';
 
 class Home extends React.Component {
@@ -84,10 +85,11 @@ class Home extends React.Component {
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
-          {(products) ? (
+          { (products) ? (
             products.map((product) => (
-              <ProductCard key={ product.id } product={ product } inHome />))
-          ) : <p>Nenhum produto foi encontrado</p>}
+              <ProductCard key={ product.id } product={ product } inHome />
+            ))
+          ) : <p>Nenhum produto foi encontrado</p> }
         </section>
       </div>
     );

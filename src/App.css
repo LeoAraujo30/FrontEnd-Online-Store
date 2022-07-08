@@ -8,3 +8,12 @@
   display: flex;
   flex-direction: row;
 }
+
+.product-detailed {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-detailed img {
+  width: 200px;
+}
