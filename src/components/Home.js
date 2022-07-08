@@ -73,10 +73,17 @@ class Home extends React.Component {
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
-          {(products && query) ? (
+          { (products && query) ? (
             products.map((product) => (
-              <ProductCard key={ product.id } product={ product } />))
-          ) : <p>Nenhum produto foi encontrado</p>}
+              <Link
+                to={ `/productdetailed/${product.id}` }
+                key={ product.id }
+                data-testid="product-detail-link"
+              >
+                <ProductCard product={ product } />
+              </Link>
+            ))
+          ) : <p>Nenhum produto foi encontrado</p> }
         </section>
       </div>
     );
