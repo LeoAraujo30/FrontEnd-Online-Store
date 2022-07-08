@@ -21,6 +21,13 @@ export async function getProductsFromQuery(query) {
   return products.results;
 }
 
+export async function getProductsFromCategoty(categoryId) {
+  const endPoint = `${baseUrl}/sites/MLB/search?category=${categoryId}`;
+  const response = await fetch(endPoint);
+  const products = await response.json();
+  return products.results;
+}
+
 export async function getProductInfo(id) {
   const endPoint = `${baseUrl}/items/${id}`;
   const response = await fetch(endPoint);

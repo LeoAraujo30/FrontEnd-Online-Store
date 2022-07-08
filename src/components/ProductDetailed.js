@@ -21,7 +21,6 @@ class ProductDetailed extends React.Component {
     this.setState({
       productDetails: product,
     });
-    console.log(product);
   }
 
   render() {
