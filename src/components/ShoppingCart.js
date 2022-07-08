@@ -16,13 +16,12 @@ class ShoppingCart extends React.Component {
 
   render() {
     const { products } = this.state;
-    console.log(products);
     return (
       <div className="cart">
         {!products
           ? (<p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>)
           : (products.map((product) => (
-            <ProductCard key={ product.id } product={ product } />
+            <ProductCard key={ product.id } product={ product } inHome={ false } />
           )))}
       </div>
     );

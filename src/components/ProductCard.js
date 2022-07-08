@@ -23,8 +23,9 @@ class ProductCard extends Component {
     return (
       <div className="product-card" data-testid="product">
         <img src={ thumbnail } alt={ title } />
-        <h3>{ title }</h3>
+        <h3 data-testid="shopping-cart-product-name">{ title }</h3>
         <p>{ price }</p>
+        <p data-testid="shopping-cart-product-quantity">1</p>
         {inHome && (
           <button
             data-testid="product-add-to-cart"
