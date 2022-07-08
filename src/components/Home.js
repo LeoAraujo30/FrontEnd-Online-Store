@@ -38,6 +38,13 @@ class Home extends React.Component {
     this.setState({ products });
   }
 
+  getProductsByCategory = async (name) => {
+    const array = await getProductsFromQuery(name);
+    this.setState({
+      products: array,
+    });
+  }
+
   render() {
     const { query, products, categorias } = this.state;
     return (
@@ -50,6 +57,7 @@ class Home extends React.Component {
                 key={ id }
                 data-testid="category"
                 type="button"
+                onClick={ () => this.getProductsByCategory(name) }
               >
                 { name }
               </button>
@@ -73,7 +81,7 @@ class Home extends React.Component {
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
-          {(products && query) ? (
+          {(products) ? (
             products.map((product) => (
               <ProductCard key={ product.id } product={ product } inHome />))
           ) : <p>Nenhum produto foi encontrado</p>}
