@@ -5,8 +5,6 @@ class ShoppingCart extends React.Component {
   constructor() {
     super();
     this.state = {
-      quantity: 1,
-      quantity2: 0,
       products: [],
     };
   }
@@ -16,27 +14,24 @@ class ShoppingCart extends React.Component {
     this.setState({ products: items });
   }
 
-  async handleAddProductToCart (product) {
+  async handleAddProductToCart(product) {
     const items = this.getCartItems();
     if (items) {
       const itemExist = items.some((item) => item.id === product.id);
       if (itemExist) {
-        const index = items.map(object => object.id).indexOf(product.id);
-        const prevQuantity = items[index].quantity
-        items[index] = { ...items[index], quantity: prevQuantity +1 }
+        const index = items.map((object) => object.id).indexOf(product.id);
+        const prevQuantity = items[index].quantity;
+        items[index] = { ...items[index], quantity: prevQuantity + 1 };
         localStorage.setItem('carrinho', JSON.stringify(items));
       } else {
         const newItemsList = [...items, product];
         localStorage.setItem('carrinho', JSON.stringify(newItemsList));
-        this.setState((estadoAnterior) => ({
-          quantity: estadoAnterior.quantity + 1,
-          quantity2: 1,
-        }) )
       }
     } else {
       localStorage.setItem('carrinho', JSON.stringify([product]));
-      this.setState({ quantity2: 1 })
     }
+    const newItems = this.getCartItems();
+    this.setState({ products: newItems });
   }
 
   getCartItems() {
@@ -46,9 +41,15 @@ class ShoppingCart extends React.Component {
 
   removeProductCart = (id) => {
     const items = this.getCartItems();
-    const productsRemoved = items.filter((product) => product.id !== id);
-    localStorage.setItem('carrinho', JSON.stringify(productsRemoved));
-    this.setState({ products: productsRemoved });
+    const index = items.map((object) => object.id).indexOf(id);
+    const prevQuantity = items[index].quantity;
+    if (prevQuantity === 1) {
+      items[index] = { ...items[index], quantity: 1 };
+    } else {
+      items[index] = { ...items[index], quantity: prevQuantity - 1 };
+    }
+    localStorage.setItem('carrinho', JSON.stringify(items));
+    this.setState({ products: items });
   }
 
   render() {
