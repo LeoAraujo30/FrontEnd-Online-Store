@@ -21,6 +21,16 @@ class ProductDetailed extends React.Component {
     this.getProductComments(id);
   }
 
+  handleAddProductToCart(product) {
+    const items = this.getCartItems();
+    if (items) {
+      const newItemsList = [...items, product];
+      localStorage.setItem('carrinho', JSON.stringify(newItemsList));
+    } else {
+      localStorage.setItem('carrinho', JSON.stringify([product]));
+    }
+  }
+
   getProductComments = (id) => {
     const allComments = JSON.parse(localStorage.getItem('comments')) || [];
     const productComments = allComments
@@ -30,11 +40,17 @@ class ProductDetailed extends React.Component {
     });
   }
 
+  getCartItems() {
+    const items = JSON.parse(localStorage.getItem('carrinho'));
+    return items;
+  }
+
   fetchProduct = async (id) => {
     const product = await getProductInfo(id);
     this.setState({
       productDetails: product,
     });
+    console.log(product);
   }
 
   handleChange = ({ target: { value, name } }) => {
@@ -67,15 +83,27 @@ class ProductDetailed extends React.Component {
   }
 
   render() {
-    const { productDetails, inputEmail, inputTextArea, productComments } = this.state;
     const arrStars = ['1', '2', '3', '4', '5'];
+    const { match: { params: { id } } } = this.props;
+    const { productDetails, inputEmail, inputTextArea, productComments } = this.state;
+    const { price, thumbnail, title } = productDetails;
+
     return (
       <>
-        <Link to="/shoppingcart">carrinho</Link>
+        <Link to="/shoppingcart" data-testid="shopping-cart-button">carrinho</Link>
         <div className="product-detailed">
-          <span data-testid="product-detail-name">{ productDetails.title }</span>
-          <img alt={ productDetails.title } src={ productDetails.thumbnail } />
-          <span>{ productDetails.price }</span>
+          <span data-testid="product-detail-name">{title}</span>
+          <img alt={ title } src={ thumbnail } />
+          <span>{price}</span>
+          <button
+            data-testid="product-detail-add-to-cart"
+            type="button"
+            onClick={ () => this.handleAddProductToCart(
+              { id, price, thumbnail, title, quantity: 1 },
+            ) }
+          >
+            Adicionar ao carrinho
+          </button>
         </div>
         <form>
           <label htmlFor="inputEmail">
