@@ -3,11 +3,19 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class ProductCard extends Component {
-  handleAddProductToCart(product) {
+  async handleAddProductCart(product) {
     const items = this.getCartItems();
     if (items) {
-      const newItemsList = [...items, product];
-      localStorage.setItem('carrinho', JSON.stringify(newItemsList));
+      const itemExist = items.some((item) => item.id === product.id);
+      if (itemExist) {
+        const index = items.map((object) => object.id).indexOf(product.id);
+        const prevQuantity = items[index].quantity;
+        items[index] = { ...items[index], quantity: prevQuantity + 1 };
+        localStorage.setItem('carrinho', JSON.stringify(items));
+      } else {
+        const newItemsList = [...items, product];
+        localStorage.setItem('carrinho', JSON.stringify(newItemsList));
+      }
     } else {
       localStorage.setItem('carrinho', JSON.stringify([product]));
     }
@@ -20,7 +28,7 @@ class ProductCard extends Component {
 
   render() {
     const { product, inHome = false } = this.props;
-    const { id, price, thumbnail, title } = product;
+    const { id, price, thumbnail, title, quantity = null } = product;
     return (
       <div className="product-card" data-testid="product">
         <Link
@@ -31,13 +39,15 @@ class ProductCard extends Component {
           <img src={ thumbnail } alt={ title } />
           <h3 data-testid="shopping-cart-product-name">{ title }</h3>
           <p>{ price }</p>
-          <p data-testid="shopping-cart-product-quantity">1</p>
+          <p data-testid="shopping-cart-product-quantity">{ quantity }</p>
         </Link>
         { inHome && (
           <button
             data-testid="product-add-to-cart"
             type="button"
-            onClick={ () => this.handleAddProductToCart({ id, price, thumbnail, title }) }
+            onClick={ () => this.handleAddProductCart(
+              { id, price, thumbnail, title, quantity: 1 },
+            ) }
           >
             Adicionar ao carrinho
           </button>
@@ -53,6 +63,7 @@ ProductCard.propTypes = {
     price: PropTypes.number.isRequired,
     thumbnail: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    quantity: PropTypes.number,
   }).isRequired,
   inHome: PropTypes.bool.isRequired,
 };
