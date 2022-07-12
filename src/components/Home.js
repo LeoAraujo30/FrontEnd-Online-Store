@@ -87,7 +87,12 @@ class Home extends React.Component {
           </p>
           { (products) ? (
             products.map((product) => (
-              <ProductCard key={ product.id } product={ product } inHome />
+              <ProductCard
+                key={ product.id }
+                product={ product }
+                inHome
+                shipping={ product.shipping.free_shipping }
+              />
             ))
           ) : <p>Nenhum produto foi encontrado</p> }
         </section>

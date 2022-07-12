@@ -27,7 +27,7 @@ class ProductCard extends Component {
   }
 
   render() {
-    const { product, inHome = false } = this.props;
+    const { product, inHome = false, shipping } = this.props;
     const {
       id,
       price,
@@ -45,6 +45,7 @@ class ProductCard extends Component {
           <img src={ thumbnail } alt={ title } />
           <h3 data-testid="shopping-cart-product-name">{ title }</h3>
           <p>{ price }</p>
+          { shipping && <p data-testid="free-shipping">Frete Grátis</p> }
           <p data-testid="shopping-cart-product-quantity">{ quantity }</p>
         </Link>
         { inHome && (
@@ -72,6 +73,7 @@ ProductCard.propTypes = {
     available_quantity: PropTypes.number,
     quantity: PropTypes.number,
   }).isRequired,
+  shipping: PropTypes.bool.isRequired,
   inHome: PropTypes.bool.isRequired,
 };
 
