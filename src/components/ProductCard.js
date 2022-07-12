@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 class ProductCard extends Component {
   async handleAddProductCart(product) {
+    const { getQuantityCart } = this.props;
     const items = this.getCartItems();
     if (items) {
       const itemExist = items.some((item) => item.id === product.id);
@@ -19,6 +20,7 @@ class ProductCard extends Component {
     } else {
       localStorage.setItem('carrinho', JSON.stringify([product]));
     }
+    getQuantityCart();
   }
 
   getCartItems() {
@@ -75,6 +77,7 @@ ProductCard.propTypes = {
   }).isRequired,
   shipping: PropTypes.bool.isRequired,
   inHome: PropTypes.bool.isRequired,
+  getQuantityCart: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

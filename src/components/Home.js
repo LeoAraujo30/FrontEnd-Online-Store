@@ -6,6 +6,7 @@ import {
   getProductsFromQuery,
   getProductsFromCategoty,
 } from '../services/api';
+import Notification from './Notification';
 import ProductCard from './ProductCard';
 
 class Home extends React.Component {
@@ -15,6 +16,7 @@ class Home extends React.Component {
       query: '',
       products: [],
       categorias: [],
+      quantityCart: 0,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -23,6 +25,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.handleCategories();
+    this.getQuantityCart();
   }
 
   handleCategories = async () => {
@@ -49,8 +52,16 @@ class Home extends React.Component {
     });
   }
 
+  getQuantityCart = () => {
+    const products = JSON.parse(localStorage.getItem('carrinho'));
+    if (products) {
+      const quantityCart = products.reduce((acc, current) => current.quantity + acc, 0);
+      this.setState({ quantityCart });
+    }
+  }
+
   render() {
-    const { query, products, categorias } = this.state;
+    const { query, products, categorias, quantityCart } = this.state;
     return (
       <div className="home">
         <div className="categorias">
@@ -79,7 +90,13 @@ class Home extends React.Component {
           <button type="button" data-testid="query-button" onClick={ this.handleSearch }>
             Pesquisar
           </button>
-          <Link data-testid="shopping-cart-button" to="/shoppingcart">carrinho</Link>
+          <Link
+            data-testid="shopping-cart-button"
+            to="/shoppingcart"
+          >
+            carrinho
+            <Notification quantityCart={ quantityCart } />
+          </Link>
         </section>
         <section className="section__products">
           <p data-testid="home-initial-message">
@@ -92,6 +109,7 @@ class Home extends React.Component {
                 product={ product }
                 inHome
                 shipping={ product.shipping.free_shipping }
+                getQuantityCart={ this.getQuantityCart }
               />
             ))
           ) : <p>Nenhum produto foi encontrado</p> }
