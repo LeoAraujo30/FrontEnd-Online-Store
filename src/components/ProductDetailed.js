@@ -50,7 +50,6 @@ class ProductDetailed extends React.Component {
     this.setState({
       productDetails: product,
     });
-    console.log(product);
   }
 
   handleChange = ({ target: { value, name } }) => {
