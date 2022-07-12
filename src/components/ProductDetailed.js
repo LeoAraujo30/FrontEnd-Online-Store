@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getProductInfo } from '../services/api';
+import Notification from './Notification';
 
 class ProductDetailed extends React.Component {
   constructor() {
@@ -12,6 +13,7 @@ class ProductDetailed extends React.Component {
       inputTextArea: '',
       inputRadio: '1',
       productComments: [],
+      quantityCart: 0,
     };
   }
 
@@ -19,6 +21,7 @@ class ProductDetailed extends React.Component {
     const { match: { params: { id } } } = this.props;
     this.fetchProduct(id);
     this.getProductComments(id);
+    this.getQuantityCart();
   }
 
   handleAddProductToCart(product) {
@@ -28,6 +31,15 @@ class ProductDetailed extends React.Component {
       localStorage.setItem('carrinho', JSON.stringify(newItemsList));
     } else {
       localStorage.setItem('carrinho', JSON.stringify([product]));
+    }
+    this.getQuantityCart();
+  }
+
+  getQuantityCart = () => {
+    const products = JSON.parse(localStorage.getItem('carrinho'));
+    if (products) {
+      const quantityCart = products.reduce((acc, current) => current.quantity + acc, 0);
+      this.setState({ quantityCart });
     }
   }
 
@@ -84,12 +96,23 @@ class ProductDetailed extends React.Component {
   render() {
     const arrStars = ['1', '2', '3', '4', '5'];
     const { match: { params: { id } } } = this.props;
-    const { productDetails, inputEmail, inputTextArea, productComments } = this.state;
+    const {
+      productDetails,
+      inputEmail,
+      inputTextArea,
+      productComments,
+      quantityCart } = this.state;
     const { price, thumbnail, title } = productDetails;
 
     return (
       <>
-        <Link to="/shoppingcart" data-testid="shopping-cart-button">carrinho</Link>
+        <Link
+          to="/shoppingcart"
+          data-testid="shopping-cart-button"
+        >
+          carrinho
+          <Notification quantityCart={ quantityCart } />
+        </Link>
         <div className="product-detailed">
           <span data-testid="product-detail-name">{title}</span>
           <img alt={ title } src={ thumbnail } />
