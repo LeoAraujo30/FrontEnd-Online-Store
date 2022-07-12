@@ -70,7 +70,7 @@ ProductCard.propTypes = {
     price: PropTypes.number.isRequired,
     thumbnail: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    available_quantity: PropTypes.number,
+    available_quantity: PropTypes.number.isRequired,
     quantity: PropTypes.number,
   }).isRequired,
   shipping: PropTypes.bool.isRequired,
