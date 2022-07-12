@@ -28,7 +28,13 @@ class ProductCard extends Component {
 
   render() {
     const { product, inHome = false } = this.props;
-    const { id, price, thumbnail, title, quantity = null } = product;
+    const {
+      id,
+      price,
+      thumbnail,
+      title,
+      available_quantity: inventory,
+      quantity = null } = product;
     return (
       <div className="product-card" data-testid="product">
         <Link
@@ -46,7 +52,7 @@ class ProductCard extends Component {
             data-testid="product-add-to-cart"
             type="button"
             onClick={ () => this.handleAddProductCart(
-              { id, price, thumbnail, title, quantity: 1 },
+              { id, price, thumbnail, title, inventory, quantity: 1 },
             ) }
           >
             Adicionar ao carrinho
@@ -63,6 +69,7 @@ ProductCard.propTypes = {
     price: PropTypes.number.isRequired,
     thumbnail: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    available_quantity: PropTypes.number,
     quantity: PropTypes.number,
   }).isRequired,
   inHome: PropTypes.bool.isRequired,

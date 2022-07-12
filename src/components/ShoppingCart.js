@@ -22,8 +22,13 @@ class ShoppingCart extends React.Component {
       if (itemExist) {
         const index = items.map((object) => object.id).indexOf(product.id);
         const prevQuantity = items[index].quantity;
-        items[index] = { ...items[index], quantity: prevQuantity + 1 };
-        localStorage.setItem('carrinho', JSON.stringify(items));
+        const inventoryLimit = items[index].inventory;
+        if (prevQuantity >= inventoryLimit) {
+          localStorage.setItem('carrinho', JSON.stringify(items));
+        } else {
+          items[index] = { ...items[index], quantity: prevQuantity + 1 };
+          localStorage.setItem('carrinho', JSON.stringify(items));
+        }
       } else {
         const newItemsList = [...items, product];
         localStorage.setItem('carrinho', JSON.stringify(newItemsList));
